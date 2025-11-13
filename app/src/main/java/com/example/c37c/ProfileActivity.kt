@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,9 +18,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +38,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.c37c.ui.theme.CreamWhite
+import com.example.c37c.ui.theme.Purple80
 
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +85,8 @@ fun ProfileBody() {
                     contentDescription = null,
                     modifier = Modifier
                         .height(100.dp)
-                        .width(100.dp).clip(
+                        .width(100.dp)
+                        .clip(
                             shape = CircleShape
                         ),
                     contentScale = ContentScale.Crop
@@ -120,7 +130,8 @@ fun ProfileBody() {
                         contentDescription = null,
                         modifier = Modifier
                             .height(80.dp)
-                            .width(80.dp).clip(
+                            .width(80.dp)
+                            .clip(
                                 shape = CircleShape
                             ),
                         contentScale = ContentScale.Crop
@@ -128,6 +139,57 @@ fun ProfileBody() {
                     Text("Story 1")
                 }
             }
+
+            OutlinedButton(onClick = {}) {
+                Text("Email")
+
+            }
+            Button(
+                onClick = {
+                    //action to trigger
+                },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Black,
+                    contentColor = CreamWhite
+                ),
+                border = BorderStroke(2.dp, Purple80)
+            ) {
+                Text("Follow")
+            }
+
+           Row {
+               Card(
+                   modifier = Modifier
+                       .height(200.dp)
+                       .weight(1f)
+               ) {
+                   Column(modifier = Modifier.fillMaxSize())
+                   {
+
+                   }
+               }
+               Spacer(
+                   modifier = Modifier.width(20.dp)
+               )
+               Card(
+                   modifier = Modifier
+                       .height(200.dp)
+                       .weight(1f),
+                   colors = CardDefaults.cardColors(
+                       containerColor = Color.White
+                   ),
+                   elevation = CardDefaults.cardElevation(
+                       defaultElevation = 2.dp
+                   ),
+                   shape = RoundedCornerShape(15.dp)
+               ) {
+                   Column(modifier = Modifier.fillMaxSize())
+                   {
+
+                   }
+               }
+           }
 
         }
 
