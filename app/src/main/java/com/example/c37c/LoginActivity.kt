@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -54,6 +55,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import com.example.c37c.ui.theme.Black
 import com.example.c37c.ui.theme.Blue
 import com.example.c37c.ui.theme.C37CTheme
@@ -61,6 +63,7 @@ import com.example.c37c.ui.theme.PurpleGrey80
 import com.example.c37c.ui.theme.White
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.Properties
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +88,8 @@ fun LoginBody() {
 
     val coroutineScope = rememberCoroutineScope ()
 
+    var showDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -96,6 +101,29 @@ fun LoginBody() {
                 .padding(padding)
                 .background(White)
         ) {
+            if(showDialog){
+                AlertDialog(
+                    onDismissRequest = {
+                        showDialog = false
+                    },
+                    confirmButton = {
+                        Text("Ok")
+                    },
+                    dismissButton = {
+                        Text("Cancel")
+                    },
+                    title = {
+                        Text("Confirm")
+                    },
+                    text = {
+                        Text("Are you sure you want  to delete")
+                    },
+                    properties = DialogProperties(
+                        dismissOnBackPress = true,
+                        dismissOnClickOutside = true
+                    )
+                )
+            }
             Spacer(modifier = Modifier.height(50.dp))
             Text(
                 "Sign In",
