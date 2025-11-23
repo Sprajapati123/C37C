@@ -1,6 +1,7 @@
 package com.example.c37c
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,16 +27,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -54,6 +59,8 @@ import com.example.c37c.ui.theme.Blue
 import com.example.c37c.ui.theme.C37CTheme
 import com.example.c37c.ui.theme.PurpleGrey80
 import com.example.c37c.ui.theme.White
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +79,17 @@ fun LoginBody() {
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
 
-    Scaffold { padding ->
+    val context = LocalContext.current
+
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val coroutineScope = rememberCoroutineScope ()
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -205,24 +222,42 @@ fun LoginBody() {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Text("Forget Password", modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp), style = TextStyle(textAlign = TextAlign.End))
+            Text(
+                "Forget Password", modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp), style = TextStyle(textAlign = TextAlign.End)
+            )
 
-            Button(onClick = {},
+            Button(
+                onClick = {
+                    if(email == "ram" && password == "password"){
+                        Toast.makeText(context,
+                            "Login successfully",
+                            Toast.LENGTH_LONG).show()
+                    }else{
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(
+                                "Invalid email or password",
+                                withDismissAction = true
+                            )
+                        }
+                    }
+                },
                 shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp, vertical = 20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp, vertical = 20.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Blue
                 )
-                ) {
+            ) {
                 Text("Log In")
             }
 
             Text(buildAnnotatedString {
                 append("Don't have account? ")
 
-                withStyle(SpanStyle(color = Blue)){
+                withStyle(SpanStyle(color = Blue)) {
                     append("Sign up")
                 }
             })
