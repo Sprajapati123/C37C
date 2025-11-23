@@ -258,18 +258,19 @@ fun LoginBody() {
 
             Button(
                 onClick = {
-                    if(email == "ram" && password == "password"){
-                        Toast.makeText(context,
-                            "Login successfully",
-                            Toast.LENGTH_LONG).show()
-                    }else{
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar(
-                                "Invalid email or password",
-                                withDismissAction = true
-                            )
-                        }
-                    }
+                    showDialog = true
+//                    if(email == "ram" && password == "password"){
+//                        Toast.makeText(context,
+//                            "Login successfully",
+//                            Toast.LENGTH_LONG).show()
+//                    }else{
+//                        coroutineScope.launch {
+//                            snackbarHostState.showSnackbar(
+//                                "Invalid email or password",
+//                                withDismissAction = true
+//                            )
+//                        }
+//                    }
                 },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
