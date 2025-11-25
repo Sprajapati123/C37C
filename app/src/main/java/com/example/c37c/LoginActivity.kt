@@ -1,5 +1,7 @@
 package com.example.c37c
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -7,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -83,6 +86,8 @@ fun LoginBody() {
     var visibility by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+
+    val activity = context as Activity
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -258,7 +263,18 @@ fun LoginBody() {
 
             Button(
                 onClick = {
-                    showDialog = true
+                    val intent = Intent(
+                        context, DashboardActivity::class.java
+                    )
+
+                    intent.putExtra("email",email)
+                    intent.putExtra("password",password)
+
+                    context.startActivity(intent)
+                    activity.finish()
+
+
+//                    showDialog = true
 //                    if(email == "ram" && password == "password"){
 //                        Toast.makeText(context,
 //                            "Login successfully",
@@ -289,6 +305,14 @@ fun LoginBody() {
                 withStyle(SpanStyle(color = Blue)) {
                     append("Sign up")
                 }
+            }, modifier = Modifier.clickable{
+                val intent = Intent(context,
+                    RegistrationActivity::class.java)
+
+                context.startActivity(intent)
+
+                activity.finish()
+
             })
         }
     }
