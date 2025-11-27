@@ -29,12 +29,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,6 +61,7 @@ import com.example.c37c.ui.theme.Blue
 import com.example.c37c.ui.theme.C37CTheme
 import com.example.c37c.ui.theme.PurpleGrey80
 import com.example.c37c.ui.theme.White
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class RegistrationActivity : ComponentActivity() {
@@ -101,8 +105,17 @@ fun RegisterBody(){
 
     val editor = sharedPreference.edit()
 
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    Scaffold { padding ->
+    val coroutineScope = rememberCoroutineScope()
+
+
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -242,10 +255,14 @@ fun RegisterBody(){
                     editor.putString("password",password)
                     editor.putString("date",selectedDate)
                     editor.apply()
-                    Toast.makeText(context,
-                        "Successfully Registered",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar("registered")
+                    }
+//                    Toast.makeText(context,
+//                        "Successfully Registered",
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//
                     activity.finish()
                 }
             },
