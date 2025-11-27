@@ -1,6 +1,7 @@
 package com.example.c37c
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -91,9 +92,15 @@ fun LoginBody() {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val coroutineScope = rememberCoroutineScope ()
+    val coroutineScope = rememberCoroutineScope()
 
     var showDialog by remember { mutableStateOf(false) }
+
+
+    val sharedPreferences = context.getSharedPreferences("User", Context.MODE_PRIVATE)
+
+    val localEmail: String? = sharedPreferences.getString("email", "")
+    val localPassword: String? = sharedPreferences.getString("password", "")
 
     Scaffold(
         snackbarHost = {
@@ -106,7 +113,7 @@ fun LoginBody() {
                 .padding(padding)
                 .background(White)
         ) {
-            if(showDialog){
+            if (showDialog) {
                 AlertDialog(
                     onDismissRequest = {
                         showDialog = false
@@ -263,15 +270,23 @@ fun LoginBody() {
 
             Button(
                 onClick = {
-                    val intent = Intent(
-                        context, DashboardActivity::class.java
-                    )
 
-                    intent.putExtra("email",email)
-                    intent.putExtra("password",password)
+                    if (localEmail == email && localPassword == password) {
+                        val intent = Intent(
+                            context, DashboardActivity::class.java
+                        )
+                        context.startActivity(intent)
+                        activity.finish()
+                    } else {
+                        Toast.makeText(context,
+                            "Invalid login",
+                            Toast.LENGTH_LONG).show()
+                    }
 
-                    context.startActivity(intent)
-                    activity.finish()
+//
+//                    intent.putExtra("email",email)
+//                    intent.putExtra("password",password)
+//
 
 
 //                    showDialog = true
@@ -305,13 +320,14 @@ fun LoginBody() {
                 withStyle(SpanStyle(color = Blue)) {
                     append("Sign up")
                 }
-            }, modifier = Modifier.clickable{
-                val intent = Intent(context,
-                    RegistrationActivity::class.java)
+            }, modifier = Modifier.clickable {
+                val intent = Intent(
+                    context,
+                    RegistrationActivity::class.java
+                )
 
                 context.startActivity(intent)
 
-                activity.finish()
 
             })
         }

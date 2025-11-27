@@ -1,5 +1,6 @@
 package com.example.c37c
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
@@ -92,6 +93,8 @@ fun RegisterBody(){
 
         },year,month,day
     )
+
+    val activity = context as Activity
 
     val sharedPreference = context.getSharedPreferences("User",
         Context.MODE_PRIVATE)
@@ -238,13 +241,12 @@ fun RegisterBody(){
                     editor.putString("email",email)
                     editor.putString("password",password)
                     editor.putString("date",selectedDate)
-
                     editor.apply()
-
                     Toast.makeText(context,
                         "Successfully Registered",
                         Toast.LENGTH_LONG
                     ).show()
+                    activity.finish()
                 }
             },
                 shape = RoundedCornerShape(10.dp),
