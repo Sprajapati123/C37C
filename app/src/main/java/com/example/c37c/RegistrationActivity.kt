@@ -1,7 +1,9 @@
 package com.example.c37c
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -90,6 +92,11 @@ fun RegisterBody(){
 
         },year,month,day
     )
+
+    val sharedPreference = context.getSharedPreferences("User",
+        Context.MODE_PRIVATE)
+
+    val editor = sharedPreference.edit()
 
 
     Scaffold { padding ->
@@ -221,7 +228,25 @@ fun RegisterBody(){
                 Text("I agree to terms & Conditions")
             }
 
-            Button(onClick = {},
+            Button(onClick = {
+                if(!terms){
+                    Toast.makeText(context,
+                        "Please agree to terms & conditions",
+                        Toast.LENGTH_LONG
+                        ).show()
+                }else{
+                    editor.putString("email",email)
+                    editor.putString("password",password)
+                    editor.putString("date",selectedDate)
+
+                    editor.apply()
+
+                    Toast.makeText(context,
+                        "Successfully Registered",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
