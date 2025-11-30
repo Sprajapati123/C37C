@@ -14,12 +14,15 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.c37c.ui.theme.Blue
 import com.example.c37c.ui.theme.C37CTheme
+import com.example.c37c.ui.theme.White
 
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +47,12 @@ fun DashboardBody() {
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Blue,
+                    actionIconContentColor = White,
+                    titleContentColor = White,
+                    navigationIconContentColor = White
+                ),
                 title = {Text("Dashboard")},
                 navigationIcon = {
                     IconButton(onClick = {
@@ -64,6 +73,17 @@ fun DashboardBody() {
                             contentDescription = null
                         )
                     }
+
+                    IconButton(onClick = {
+
+                    }) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_more_horiz_24),
+                            contentDescription = null
+                        )
+                    }
+
+
                 }
             )
         }
