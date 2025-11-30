@@ -45,21 +45,21 @@ fun SplashBody() {
     val context = LocalContext.current
     val activity = context as Activity
 
-    LaunchedEffect(Unit) {
-        delay(3000)
-        if(){
-            val intent = Intent(context,
-                DashboardActivity::class.java)
-            context.startActivity(intent)
-            activity.finish()
-        }else{
-            val intent = Intent(context,
-                LoginActivity::class.java)
-            context.startActivity(intent)
-            activity.finish()
-        }
-
-    }
+//    LaunchedEffect(Unit) {
+//        delay(3000)
+//        if(){
+//            val intent = Intent(context,
+//                DashboardActivity::class.java)
+//            context.startActivity(intent)
+//            activity.finish()
+//        }else{
+//            val intent = Intent(context,
+//                LoginActivity::class.java)
+//            context.startActivity(intent)
+//            activity.finish()
+//        }
+//
+//    }
     Scaffold { padding ->
         Column(
             modifier = Modifier
