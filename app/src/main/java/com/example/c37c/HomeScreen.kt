@@ -35,6 +35,14 @@ fun HomeScreen() {
         R.drawable.goldfish,
         R.drawable.dog
     )
+    var dataName = listOf(
+        "Gmail",
+        "Facebook",
+        "Cat",
+       "Hamster",
+       "goldfish",
+        "dog"
+    )
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -48,11 +56,14 @@ fun HomeScreen() {
         item {
             LazyRow {
                 items(data.size){index->
-                    Image(
-                        painter = painterResource(data[index]),
-                        contentDescription = null,
-                        modifier = Modifier.size(70.dp).padding(end = 10.dp)
-                    )
+                    Column {
+                        Image(
+                            painter = painterResource(data[index]),
+                            contentDescription = null,
+                            modifier = Modifier.size(70.dp).padding(end = 10.dp)
+                        )
+                        Text(dataName[index])
+                    }
                 }
             }
         }
