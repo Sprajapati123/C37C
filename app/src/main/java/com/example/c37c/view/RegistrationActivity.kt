@@ -55,9 +55,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.c37c.R
+import com.example.c37c.model.UserModel
+import com.example.c37c.repository.UserRepo
+import com.example.c37c.repository.UserRepoImpl
 import com.example.c37c.ui.theme.Blue
 import com.example.c37c.ui.theme.PurpleGrey80
 import com.example.c37c.ui.theme.White
+import com.example.c37c.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -72,7 +76,7 @@ class RegistrationActivity : ComponentActivity() {
 }
 
 @Composable
-fun RegisterBody(){
+fun RegisterBody() {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -82,7 +86,7 @@ fun RegisterBody(){
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
-
+    val userViewModel = remember { UserViewModel(UserRepoImpl()) }
 
     val year = calendar.get(Calendar.YEAR)
     val month = calendar.get(Calendar.MONTH)
@@ -91,16 +95,18 @@ fun RegisterBody(){
     var selectedDate by remember { mutableStateOf("") }
 
     val datepicker = DatePickerDialog(
-        context,{
-            _,y,m,d-> selectedDate = "$y/${m+1}/$d"
+        context, { _, y, m, d ->
+            selectedDate = "$y/${m + 1}/$d"
 
-        },year,month,day
+        }, year, month, day
     )
 
-    val activity = context as Activity
+    val activity = context as? Activity
 
-    val sharedPreference = context.getSharedPreferences("User",
-        Context.MODE_PRIVATE)
+    val sharedPreference = context.getSharedPreferences(
+        "User",
+        Context.MODE_PRIVATE
+    )
 
     val editor = sharedPreference.edit()
 
@@ -243,8 +249,47 @@ fun RegisterBody(){
                 Text("I agree to terms & Conditions")
             }
 
-            Button(onClick = {
-
+            Button(
+                onClick = {
+                    if(!terms){
+                        Toast.makeText(context,
+                        "Please agree to terms & conditions",
+                        Toast.LENGTH_LONG
+                        ).show()
+                    }else{
+                        userViewModel.register(email,password){
+                           success,message,userId->
+                            if(success){
+                                val model = UserModel(
+                                    userId = userId,
+                                    email = email,
+                                    firstName = "",
+                                    lastName = "",
+                                    dob = selectedDate,
+                                    contact = ""
+                                )
+                                userViewModel.addUserToDatabase(userId,model){
+                                    success,message->
+                                    if(success){
+                                        Toast.makeText(context,
+                                            message,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }else{
+                                        Toast.makeText(context,
+                                            message,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                }
+                            }else{
+                                Toast.makeText(context,
+                                    message,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
 //                if(!terms){
 //                    Toast.makeText(context,
 //                        "Please agree to terms & conditions",
@@ -265,7 +310,7 @@ fun RegisterBody(){
 ////
 //                    activity.finish()
 //                }
-            },
+                },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -280,7 +325,7 @@ fun RegisterBody(){
             Text(buildAnnotatedString {
                 append("Already have account? ")
 
-                withStyle(SpanStyle(color = Blue)){
+                withStyle(SpanStyle(color = Blue)) {
                     append("Sign In")
                 }
             })
@@ -290,6 +335,6 @@ fun RegisterBody(){
 
 @Preview
 @Composable
-fun PreviewRegister(){
+fun PreviewRegister() {
     RegisterBody()
 }
