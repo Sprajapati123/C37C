@@ -1,4 +1,4 @@
-package com.example.c37c
+package com.example.c37c.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

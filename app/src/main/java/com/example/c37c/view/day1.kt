@@ -1,4 +1,4 @@
-package com.example.c37c
+package com.example.c37c.view
 
 fun main() {
     var result = calculate(5,5)

@@ -1,4 +1,4 @@
-package com.example.c37c
+package com.example.c37c.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -9,13 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun MoreScreen() {
+fun SearchScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Yellow),
+            .background(Color.Blue),
 
         ) {
-        Text("More screen")
+        Text("Search screen")
     }
 }

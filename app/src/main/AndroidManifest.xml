@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.C37C">
         <activity
-            android:name=".SplashActivity"
+            android:name=".view.SplashActivity"
             android:exported="true"
             android:label="@string/title_activity_splash"
             android:theme="@style/Theme.C37C">
@@ -23,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DashboardActivity"
+            android:name=".view.DashboardActivity"
             android:exported="true"
             android:label="@string/title_activity_dashboard"
             android:theme="@style/Theme.C37C">
@@ -34,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".view.RegistrationActivity"
             android:exported="true"
             android:label="@string/title_activity_registration"
             android:theme="@style/Theme.C37C">
@@ -45,7 +48,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.C37C">
@@ -56,7 +59,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProfileActivity"
+            android:name=".view.ProfileActivity"
             android:exported="true"
             android:label="@string/title_activity_profile"
             android:theme="@style/Theme.C37C">
@@ -67,7 +70,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.C37C">
