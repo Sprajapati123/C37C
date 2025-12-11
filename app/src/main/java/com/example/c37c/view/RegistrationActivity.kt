@@ -78,6 +78,7 @@ class RegistrationActivity : ComponentActivity() {
 @Composable
 fun RegisterBody() {
 
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
@@ -87,6 +88,7 @@ fun RegisterBody() {
     val calendar = Calendar.getInstance()
 
     val userViewModel = remember { UserViewModel(UserRepoImpl()) }
+
 
     val year = calendar.get(Calendar.YEAR)
     val month = calendar.get(Calendar.MONTH)

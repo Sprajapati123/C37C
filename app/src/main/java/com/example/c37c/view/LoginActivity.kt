@@ -46,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -61,10 +62,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.example.c37c.R
+import com.example.c37c.repository.UserRepoImpl
 import com.example.c37c.ui.theme.Black
 import com.example.c37c.ui.theme.Blue
 import com.example.c37c.ui.theme.PurpleGrey80
 import com.example.c37c.ui.theme.White
+import com.example.c37c.viewmodel.UserViewModel
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +82,8 @@ class LoginActivity : ComponentActivity() {
 @Composable
 fun LoginBody() {
 
+    val keyCo = LocalSoftwareKeyboardController.current
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
@@ -86,6 +91,8 @@ fun LoginBody() {
     val context = LocalContext.current
 
     val activity = context as Activity
+
+    val userViewModel = remember { UserViewModel(UserRepoImpl()) }
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -96,8 +103,8 @@ fun LoginBody() {
 
     val sharedPreferences = context.getSharedPreferences("User", Context.MODE_PRIVATE)
 
-    val localEmail: String? = sharedPreferences.getString("email", "")
-    val localPassword: String? = sharedPreferences.getString("password", "")
+//    val localEmail: String? = sharedPreferences.getString("email", "")
+//    val localPassword: String? = sharedPreferences.getString("password", "")
 
     Scaffold(
         snackbarHost = {
@@ -267,19 +274,33 @@ fun LoginBody() {
 
             Button(
                 onClick = {
-
-
-                    if (localEmail == email && localPassword == password) {
-                        val intent = Intent(
-                            context, DashboardActivity::class.java
-                        )
-                        context.startActivity(intent)
-                        activity.finish()
-                    } else {
-                        Toast.makeText(context,
-                            "Invalid login",
-                            Toast.LENGTH_LONG).show()
+                    keyCo?.hide()
+                    userViewModel.login(email, password) { success, message ->
+                        if (success) {
+                            val intent = Intent(
+                                context, DashboardActivity::class.java
+                            )
+                            context.startActivity(intent)
+                            activity.finish()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
+//                    if (localEmail == email && localPassword == password) {
+//                        val intent = Intent(
+//                            context, DashboardActivity::class.java
+//                        )
+//                        context.startActivity(intent)
+//                        activity.finish()
+//                    } else {
+//                        Toast.makeText(context,
+//                            "Invalid login",
+//                            Toast.LENGTH_LONG).show()
+//                    }
 
 //
 //                    intent.putExtra("email",email)

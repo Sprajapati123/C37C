@@ -7,10 +7,12 @@ import javax.security.auth.callback.Callback
 interface UserRepo {
     //{
     //    "success":true,
-    //    "message":"Login successful"
+    //    "message":"Email snet"
     // }
     fun login(email: String, password: String,
               callback: (Boolean, String)-> Unit)
+
+    fun forgetPassword(email:String,callback: (Boolean, String) -> Unit)
 
     fun register(
         email: String, password: String,
