@@ -94,6 +94,8 @@ fun LoginBody() {
 
     val userViewModel = remember { UserViewModel(UserRepoImpl()) }
 
+//    val users = userViewModel.users.observeAsState()
+
     val snackbarHostState = remember { SnackbarHostState() }
 
     val coroutineScope = rememberCoroutineScope()

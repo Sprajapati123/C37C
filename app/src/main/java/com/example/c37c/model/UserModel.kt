@@ -9,6 +9,8 @@ data class UserModel(
     val dob : String = "",
 ){
     fun toMap() : Map<String,Any?>{
-        return mapOf()
+        return mapOf(
+            "contact" to contact
+        )
     }
 }

@@ -66,9 +66,10 @@ class UserRepoImpl: UserRepo {
         callback: (Boolean, String) -> Unit
     ) {
 //        id auto generate
-//        var id = ref.push().key.toString()
+//        var id = ref.push()[.key.toString()
         //model.id = id
 
+//        ref.orderByChild("categoryId").equalTo("").ge
         ref.child(userId).setValue(model).addOnCompleteListener {
             if(it.isSuccessful){
                 callback(true,"User registered successfully")

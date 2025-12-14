@@ -26,6 +26,9 @@ import com.example.c37c.R
 
 @Composable
 fun HomeScreen() {
+
+
+
     var data = listOf(
         R.drawable.gmail,
         R.drawable.face,
