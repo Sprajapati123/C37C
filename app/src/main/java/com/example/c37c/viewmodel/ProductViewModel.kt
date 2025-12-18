@@ -1,5 +1,6 @@
 package com.example.c37c.viewmodel
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,8 +17,13 @@ class ProductViewModel(val repo: ProductRepo) : ViewModel() {
         repo.updateProduct(model,callback)
     }
 
-    fun deleteProduct(productId: String, callback: (Boolean, String) -> Unit) {
-        repo.deleteProduct(productId,callback)
+    fun deleteProduct(id: String, callback: (Boolean, String) -> Unit) {
+        repo.deleteProduct(id) { success, message ->
+            if (success) {
+                _allProducts.value = _allProducts.value?.filterNot { it.productId == id }
+            }
+            callback(success, message)
+        }
     }
 
     private val _products = MutableLiveData<ProductModel?>()
@@ -39,6 +45,7 @@ class ProductViewModel(val repo: ProductRepo) : ViewModel() {
         repo.getProductById(productId) {
                 sucess,message,data->
             if(sucess){
+                Log.d("checkpoint",data!!.productId)
                 _products.postValue(data)
             }
         }

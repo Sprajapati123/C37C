@@ -51,7 +51,7 @@ class ProductRepoIMpl : ProductRepo {
     ) {
         ref.child(productId).removeValue().addOnCompleteListener {
             if(it.isSuccessful){
-                callback(true,"product added")
+                callback(true,"product deleted")
             }else{
                 callback(false,"${it.exception?.message}")
 

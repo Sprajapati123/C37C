@@ -1,6 +1,5 @@
 package com.example.c37c.view
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -31,42 +30,98 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.c37c.repository.UserRepoImpl
+import com.example.c37c.model.ProductModel
+import com.example.c37c.repository.ProductRepoIMpl
 import com.example.c37c.ui.theme.Blue
 import com.example.c37c.ui.theme.PurpleGrey80
-import com.example.c37c.viewmodel.UserViewModel
+import com.example.c37c.viewmodel.ProductViewModel
 
-class ForgetPasswordActivity : ComponentActivity() {
+class AddProductActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
+            AddProductBody()
         }
     }
 }
 
 @Composable
-fun ForgetBody() {
-    val userViewModel = remember { UserViewModel(UserRepoImpl()) }
+fun AddProductBody() {
+
+    var productViewModel = remember { ProductViewModel(ProductRepoIMpl()) }
+    var pname by remember { mutableStateOf("") }
+    var pPrice by remember { mutableStateOf("") }
+    var pDesc by remember { mutableStateOf("") }
+
     val context = LocalContext.current
-    var email by remember { mutableStateOf("") }
     Scaffold { padding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(padding)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
         ) {
             item {
-
                 OutlinedTextField(
-                    value = email,
+                    value = pname,
                     onValueChange = { data ->
-                        email = data
+                        pname = data
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email
                     ),
                     placeholder = {
-                        Text("abc@gmail.com")
+                        Text("Product name")
+                    },
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = PurpleGrey80,
+                        focusedContainerColor = PurpleGrey80,
+                        focusedIndicatorColor = Blue,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                    shape = RoundedCornerShape(15.dp)
+                )
+
+
+                Spacer(modifier = Modifier.height(20.dp))
+                OutlinedTextField(
+                    value = pPrice,
+                    onValueChange = { data ->
+                        pPrice = data
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email
+                    ),
+                    placeholder = {
+                        Text("Product price")
+                    },
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = PurpleGrey80,
+                        focusedContainerColor = PurpleGrey80,
+                        focusedIndicatorColor = Blue,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                    shape = RoundedCornerShape(15.dp)
+                )
+
+
+                Spacer(modifier = Modifier.height(20.dp))
+                OutlinedTextField(
+                    value = pDesc,
+                    onValueChange = { data ->
+                        pDesc = data
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email
+                    ),
+                    placeholder = {
+                        Text("Product desc")
                     },
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = PurpleGrey80,
@@ -85,7 +140,14 @@ fun ForgetBody() {
 
                 Button(
                     onClick = {
-                        userViewModel.forgetPassword(email) { success, message ->
+                        var model = ProductModel(
+                            "",
+                            pname,
+                            pPrice.toDouble(),
+                            pDesc,
+                            ""
+                        )
+                        productViewModel.addProduct(model) { success, message ->
                             if (success) {
                                 Toast.makeText(
                                     context,
@@ -140,7 +202,7 @@ fun ForgetBody() {
                         containerColor = Blue
                     )
                 ) {
-                    Text("Forget Password")
+                    Text("Add Product")
                 }
             }
         }
