@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -58,51 +59,206 @@ fun HomeScreen() {
     val productViewModel = remember { ProductViewModel(ProductRepoIMpl()) }
 
 
-    LaunchedEffect(Unit) {
+    var pname by remember { mutableStateOf("") }
+    var pPrice by remember { mutableStateOf("") }
+    var pDesc by remember { mutableStateOf("") }
+
+    val loading = productViewModel.loading.observeAsState(initial = false)
+    val products = productViewModel.products.observeAsState(initial = null)
+
+    LaunchedEffect(products.value) {
         productViewModel.getAllProduct()
+
+
+        products.value?.let {
+            pname = it.name
+            pDesc = it.description
+            pPrice = it.price.toString()
+        }
     }
+
 
     val allProducts = productViewModel.allProducts
                                     .observeAsState(initial = emptyList())
+
+    var showDialog by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
         ) {
-        items(allProducts.value!!.size){index->
-            var data = allProducts.value!![index]
+        item {
+            if(showDialog){
+                AlertDialog(
+                    onDismissRequest = {
+                        showDialog = false
+                    },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            var model = ProductModel(
+                                products.value!!.productId,
+                                pname,
+                                pPrice.toDouble(),
+                                pDesc,
+                                ""
 
-            Card(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 15.dp)
-            ){
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(data.name)
-                    Text(data.price.toString())
-                    Text(data.description)
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Default.Edit,contentDescription = null)
-                    }
-                    IconButton(onClick = {
-                        productViewModel.deleteProduct(data.productId){
-                            success,message->
-                            if(success){
-                                Toast.makeText(context,
-                                    message,
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }else{
-                                Toast.makeText(context,
-                                    message,
-                                    Toast.LENGTH_LONG
-                                ).show()
+                            )
+                            productViewModel.updateProduct(model){
+                                success,message->
+                                if(success){
+                                    showDialog = false
+                                    Toast.makeText(context,
+                                        message,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }else{
+                                    Toast.makeText(context,
+                                        message,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
                             }
+                        }) {
+                            Text("Update")
                         }
-                    }) {
-                        Icon(Icons.Default.Delete,contentDescription = null)
+                    },
+                    dismissButton = {
+                        TextButton(onClick = {
+                            showDialog = false
+                        }) {
+                            Text("Cancel")
+                        }
+                    },
+                    title = {
+                        Text("Update Product")
+                    },
+                    text = {
+                        Column {
+                            OutlinedTextField(
+                                value = pname,
+                                onValueChange = { data ->
+                                    pname = data
+                                },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Email
+                                ),
+                                placeholder = {
+                                    Text("Product name")
+                                },
+                                colors = TextFieldDefaults.colors(
+                                    unfocusedContainerColor = PurpleGrey80,
+                                    focusedContainerColor = PurpleGrey80,
+                                    focusedIndicatorColor = Blue,
+                                    unfocusedIndicatorColor = Color.Transparent
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 15.dp),
+                                shape = RoundedCornerShape(15.dp)
+                            )
+
+
+                            Spacer(modifier = Modifier.height(20.dp))
+                            OutlinedTextField(
+                                value = pPrice,
+                                onValueChange = { data ->
+                                    pPrice = data
+                                },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Email
+                                ),
+                                placeholder = {
+                                    Text("Product price")
+                                },
+                                colors = TextFieldDefaults.colors(
+                                    unfocusedContainerColor = PurpleGrey80,
+                                    focusedContainerColor = PurpleGrey80,
+                                    focusedIndicatorColor = Blue,
+                                    unfocusedIndicatorColor = Color.Transparent
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 15.dp),
+                                shape = RoundedCornerShape(15.dp)
+                            )
+
+
+                            Spacer(modifier = Modifier.height(20.dp))
+                            OutlinedTextField(
+                                value = pDesc,
+                                onValueChange = { data ->
+                                    pDesc = data
+                                },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Email
+                                ),
+                                placeholder = {
+                                    Text("Product desc")
+                                },
+                                colors = TextFieldDefaults.colors(
+                                    unfocusedContainerColor = PurpleGrey80,
+                                    focusedContainerColor = PurpleGrey80,
+                                    focusedIndicatorColor = Blue,
+                                    unfocusedIndicatorColor = Color.Transparent
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 15.dp),
+                                shape = RoundedCornerShape(15.dp)
+                            )
+
+
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                        }
+                    }
+                )
+            }
+        }
+        if(loading.value){
+            item {
+                CircularProgressIndicator()
+            }
+        }else{
+            items(allProducts.value!!.size){index->
+                var data = allProducts.value!![index]
+
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 15.dp)
+                ){
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Text(data.name)
+                        Text(data.price.toString())
+                        Text(data.description)
+                        IconButton(onClick = {
+                            showDialog = true
+                            productViewModel.getProductById(data.productId)
+                        }) {
+                            Icon(Icons.Default.Edit,contentDescription = null)
+                        }
+                        IconButton(onClick = {
+                            productViewModel.deleteProduct(data.productId){
+                                    success,message->
+                                if(success){
+                                    Toast.makeText(context,
+                                        message,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }else{
+                                    Toast.makeText(context,
+                                        message,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                        }) {
+                            Icon(Icons.Default.Delete,contentDescription = null)
+                        }
                     }
                 }
             }
         }
+
     }
 }
 
